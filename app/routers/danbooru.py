@@ -68,9 +68,9 @@ class Danbooru:
     def imread(image):
         try:
             image = Image.open(image.file).convert("RGB")
-        except Exception:
+        except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                detail=f"""{image.filename} is not image file  """,
+                detail=f"""{image.filename} is not image file, {e} """,
             )
         return image
