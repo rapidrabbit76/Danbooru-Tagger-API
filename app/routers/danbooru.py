@@ -5,7 +5,6 @@ from fastapi import (
     UploadFile,
     HTTPException,
     status,
-    logger,
     Body,
 )
 from fastapi_restful.cbv import cbv
@@ -37,7 +36,7 @@ class Danbooru:
         logger.info("------------- Tagger Done -----------")
         return output
 
-    @router.post("/predict/socre", response_model=T.List[float])
+    @router.post("/predict/score", response_model=T.List[float])
     def predict_score(
         self,
         image: UploadFile = File(...),
