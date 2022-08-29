@@ -37,8 +37,8 @@ def init_settings(app: FastAPI):
     @app.get("/")
     async def index():
         """ELB check"""
-        current_time = datetime.utcnow()
-        msg = f"Notification API (UTC: {current_time.strftime('%Y.%m.%d %H:%M:%S')})"
+        current_time = datetime.utcnow().strftime("%Y.%m.%d %H:%M:%S")
+        msg = f"Notification API (UTC: {current_time})"
         return Response(msg)
 
 

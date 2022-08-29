@@ -5,7 +5,6 @@ from fastapi import (
     UploadFile,
     HTTPException,
     status,
-    logger,
     Body,
 )
 from fastapi_restful.cbv import cbv

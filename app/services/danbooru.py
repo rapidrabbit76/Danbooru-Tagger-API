@@ -45,7 +45,11 @@ class DanbooruService:
         return output
 
     @torch.inference_mode()
-    def predict_tags(self, image: Image.Image, threshold: float) -> T.List[str]:
+    def predict_tags(
+        self,
+        image: Image.Image,
+        threshold: float,
+    ) -> T.List[str]:
         image = self.preprocessing(image)
         output = self.embedding_streamer.predict([image])[0]
         output = torch.unsqueeze(output, dim=0)
