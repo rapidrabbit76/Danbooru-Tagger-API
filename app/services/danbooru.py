@@ -29,11 +29,13 @@ class DanbooruService:
         self.tagging_streamer = tagger_streamer
 
     @torch.inference_mode()
-    def predict_embedding(self, image: Image.Image) -> T.List[float]:
-        image = self.preprocessing(image)
-        output = self.embedding_streamer.predict([image])[0]
-        output = output.tolist()
-        return output
+    def predict_embedding(
+        self, images: T.List[Image.Image]
+    ) -> T.List[T.List[float]]:
+        images = [self.preprocessing(image) for image in images]
+        outputs = self.embedding_streamer.predict(images)
+        outputs = [output.tolist() for output in outputs]
+        return outputs
 
     @torch.inference_mode()
     def predict_score(self, image: Image.Image) -> T.List[float]:

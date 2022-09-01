@@ -25,14 +25,14 @@ setting = get_settings()
 class Danbooru:
     svc: DanbooruService = Depends()
 
-    @router.post("/predict/embedding", response_model=T.List[float])
+    @router.post("/predict/embedding", response_model=T.List[T.List[float]])
     def predict_embedding(
         self,
-        image: UploadFile = File(...),
+        images: T.List[UploadFile] = File(...),
     ):
         logger.info("------------- Tagger Start -----------")
-        image = self.imread(image)
-        output = self.svc.predict_embedding(image)
+        images = [self.imread(image) for image in images]
+        output = self.svc.predict_embedding(images)
         logger.info("------------- Tagger Done -----------")
         return output
 
