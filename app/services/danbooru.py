@@ -8,10 +8,12 @@ from torchvision.transforms.functional import (
     resize,
     to_tensor,
 )
+
 from ..managers import (
     get_danbooru_embedding_streamer,
     get_danbooru_tagger_streamer,
 )
+from ..schema import Tag
 from ..settings import get_settings
 from class_name import CLASSES
 
@@ -56,7 +58,7 @@ class DanbooruService:
         self,
         images: T.List[Image.Image],
         threshold: float,
-    ) -> T.List[T.List[str]]:
+    ) -> T.List[T.List[Tag]]:
         images = [self.preprocessing(image) for image in images]
         embeddings = self.embedding_streamer.predict(images)
         embeddings = [
@@ -78,7 +80,14 @@ class DanbooruService:
         return image.unsqueeze(0)
 
     @staticmethod
-    def postprocessing(score, threshold):
+    def postprocessing(score, threshold) -> Tag:
         tmp = score[score > threshold]
         index = score.argsort()[::-1]
+        tags = [
+            Tag(
+                name=CLASSES[i],
+                score=score[i],
+            )
+            for i in index[: len(tmp)]
+        ]
         return tags

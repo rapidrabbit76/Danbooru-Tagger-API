@@ -11,8 +11,9 @@ from fastapi_restful.cbv import cbv
 
 from fastapi_restful.inferring_router import InferringRouter
 from fastapi.logger import logger
-from app.settings import get_settings
-from app.services import DanbooruService
+from ..schema import Tag
+from ..settings import get_settings
+from ..services import DanbooruService
 
 from PIL import Image
 from class_name import CLASSES
@@ -63,7 +64,7 @@ class Danbooru:
         logger.info("------------- Tagger Done -----------")
         return output
 
-    @router.post("/predict/tag", response_model=T.List[T.List[str]])
+    @router.post("/predict/tag", response_model=T.List[T.List[Tag]])
     def predict_tag(
         self,
         images: T.List[Image.Image] = Depends(multiple_image_read),
