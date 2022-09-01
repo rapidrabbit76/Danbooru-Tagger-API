@@ -38,26 +38,32 @@ class DanbooruService:
         return outputs
 
     @torch.inference_mode()
-    def predict_score(self, image: Image.Image) -> T.List[float]:
-        image = self.preprocessing(image)
-        output = self.embedding_streamer.predict([image])[0]
-        output = torch.unsqueeze(output, dim=0)
-        output = self.tagging_streamer.predict([output])[0]
-        output = output.tolist()
+    def predict_score(
+        self,
+        images: T.List[Image.Image],
+    ) -> T.List[float]:
+        images = [self.preprocessing(image) for image in images]
+        embeddings = self.embedding_streamer.predict(images)
+        embeddings = [
+            torch.unsqueeze(embedding, dim=0) for embedding in embeddings
+        ]
+        preds = self.tagging_streamer.predict(embeddings)
+        output = [pred.tolist() for pred in preds]
         return output
 
     @torch.inference_mode()
     def predict_tags(
         self,
-        image: Image.Image,
+        images: T.List[Image.Image],
         threshold: float,
-    ) -> T.List[str]:
-        image = self.preprocessing(image)
-        output = self.embedding_streamer.predict([image])[0]
-        output = torch.unsqueeze(output, dim=0)
-        output = self.tagging_streamer.predict([output])[0]
-        output = output.numpy()
-        tags = self.postprocessing(output, threshold)
+    ) -> T.List[T.List[str]]:
+        images = [self.preprocessing(image) for image in images]
+        embeddings = self.embedding_streamer.predict(images)
+        embeddings = [
+            torch.unsqueeze(embedding, dim=0) for embedding in embeddings
+        ]
+        preds = self.tagging_streamer.predict(embeddings)
+        tags = [self.postprocessing(pred.numpy(), threshold) for pred in preds]
         return tags
 
     @staticmethod
