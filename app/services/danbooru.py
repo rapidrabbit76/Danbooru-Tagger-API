@@ -80,6 +80,5 @@ class DanbooruService:
     @staticmethod
     def postprocessing(score, threshold):
         tmp = score[score > threshold]
-        index = score.argsort()
-        tags = [CLASSES[i] for i in index[: len(tmp)]]
+        index = score.argsort()[::-1]
         return tags
