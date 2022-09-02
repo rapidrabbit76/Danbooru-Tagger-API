@@ -5,9 +5,8 @@ services:
     image: ys2lee/danbooru-tag-api:latest
     build: .
     restart: unless-stopped
-    command: uvicorn app.main:app --host 0.0.0.0  --port 8000 --log-config ./log.ini
     ports:
-      - "8000:8000"
+      - "8001:8000"
     expose:
       - 8000
     volumes:
@@ -15,6 +14,7 @@ services:
       - ./log:/app/log:rw
 
     environment:
+      PORT: 8000
       DL_EMBEDDING_MODEL_PATH: model_store/embedding.zip
       DL_CLASSIFIER_MODEL_PATH: model_store/classifier.zip
 

@@ -1,0 +1,1 @@
+streamlit run --server.address=0.0.0.0 --server.port $PORT app.py

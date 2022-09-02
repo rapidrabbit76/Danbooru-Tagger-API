@@ -31,10 +31,10 @@ def client():
 def files():
     files = [
         (
-            "image",
+            "images",
             (
                 "temp.jpeg",
-                open("src/temp.jpeg", "rb"),
+                open("src/temp.jpeg", "rb").read(),
                 "image/jpeg",
             ),
         )
