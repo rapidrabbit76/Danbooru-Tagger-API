@@ -1,5 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
+from app.schema import Tag
 
 
 @pytest.mark.parametrize("count", [i for i in range(1, 3)])
@@ -51,6 +52,6 @@ def test_predict_tag(client: TestClient, files, count):
 
     tags = res.json()
     assert isinstance(tags[0], list)
-    assert isinstance(tags[0][0], str)
+    assert isinstance(tags[0][0], dict)
     assert len(tags) == count
     assert len(tags[0]) <= 6000
